@@ -1,0 +1,33 @@
+---
+
+- name: Check network device OS
+  assert:
+    that: >
+      ansible_network_os == 'nxos' or
+      ansible_network_os == 'ios'
+    msg: "Network device OS not defined or not supported by this role: {{ ansible_network_os }}"
+
+- name: Add/remove nxos ntp servers
+  nxos_ntp:
+    server: "{{ item.name | default(omit) }}"    
+    prefer:  "{{ item.prefer | default(omit) }}" 
+    state: "{{ item.state | default('present') }}"
+    vrf_name: "{{ item.vrf | default(omit) }}"
+  with_items: "{{ ntp_servers }}"    
+  when: >
+    ansible_network_os == 'nxos'  
+  tags: 
+    - ntp_config
+    - nxos
+
+- name: define ntp source
+  nxos_ntp:
+    source_int: "{{ ntp_source.source_interface | default(omit) }}" 
+    source_addr: "{{ ntp_source.source_address | default(omit) }}"
+    state: "{{ ntp_source.state | default('present') }}"   
+  when: >
+    ansible_network_os == 'nxos'  
+  tags: 
+    - ntp_config
+    - nxos
+
