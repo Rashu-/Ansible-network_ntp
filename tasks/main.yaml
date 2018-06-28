@@ -13,9 +13,10 @@
     prefer:  "{{ item.prefer | default(omit) }}" 
     state: "{{ item.state | default('present') }}"
     vrf_name: "{{ item.vrf | default(omit) }}"
-  with_items: "{{ ntp_servers }}"    
+  loop: "{{ ntp_servers }}"    
   when: >
-    ansible_network_os == 'nxos'  
+    ansible_network_os == 'nxos' and
+    ntp_servers is defined 
   tags: 
     - ntp_config
     - nxos
@@ -26,7 +27,8 @@
     source_addr: "{{ ntp_source.source_address | default(omit) }}"
     state: "{{ ntp_source.state | default('present') }}"   
   when: >
-    ansible_network_os == 'nxos'  
+    ansible_network_os == 'nxos' and
+    ntp_source is defined  
   tags: 
     - ntp_config
     - nxos
