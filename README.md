@@ -30,9 +30,10 @@ Please report any issues or send PR.
       - name: 0.pool.ntp.org
         prefer: enabled
         state: present
-    ntp_source:                         
-      source_interface: loopback0      
-      state: present
+    ntp_options:
+      source:                         
+        source_interface: loopback0      
+        state: present
   roles:
     - Ansible-network_ntp
 
@@ -43,9 +44,10 @@ Please report any issues or send PR.
       - name: 0.pool.ntp.org
         prefer: enabled
         state: present
-    ntp_source:
-      source_address: 192.168.1.1
-      state: present
+    ntp_options:
+      source:
+        source_address: 192.168.1.1
+        state: present
   roles:
     - Ansible-network_ntp
 
@@ -74,13 +76,24 @@ Please report any issues or send PR.
         vrf: management
   roles:
     - Ansible-network_ntp
+
+- name: Example of how to add ntp options
+  hosts: switches
+  vars:
+    ntp_options:
+      logging: yes
+      master: no
+      state: present
+      stratum: 8               # when master=yes, stratum can be specified, default 8.
+  roles:
+    - Ansible-network_ntp
 ```
 
 ## Role variables
 
 ```yaml
 # Define source address/interface(either one, not both) for ntp  (see README for examples)
-ntp_source: { }
+ntp_options: { }
 
 # Define the ntp servers to be configured (see README for examples)
 ntp_servers: { }
