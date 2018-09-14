@@ -1,7 +1,8 @@
 ---
 
-# Define source address/interface(either one, not both) for ntp  (see README for examples)
-ntp_source: { }
+# Define logging and source address/interface(either one, not both) for ntp  (see README for examples)
+ntp_options: { }
 
 # Define the ntp servers to be configured (see README for examples)
 ntp_servers: { }
+

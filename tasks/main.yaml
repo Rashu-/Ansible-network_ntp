@@ -23,13 +23,25 @@
 
 - name: define ntp source
   nxos_ntp:
-    source_int: "{{ ntp_source.source_interface | default(omit) }}" 
-    source_addr: "{{ ntp_source.source_address | default(omit) }}"
-    state: "{{ ntp_source.state | default('present') }}"   
+    source_int: "{{ ntp_options.source.source_interface | default(omit) }}" 
+    source_addr: "{{ ntp_options.source.source_address | default(omit) }}"
+    state: "{{ ntp_options.source.state | default('present') }}"   
   when: >
     ansible_network_os == 'nxos' and
-    ntp_source is defined  
+    ntp_options.source is defined  
   tags: 
     - ntp_config
     - nxos
 
+- name: define ntp options
+  nxos_ntp_options:
+    logging: "{{ ntp_options.logging | default(omit) }}"
+    master: "{{ ntp_options.master | default(omit) }}"
+    state: "{{ ntp_options.state | default('present') }}"
+    stratum: "{{ ntp_options.stratum | default(omit) }}"
+  when: >
+    ansible_network_os == 'nxos' and
+    ntp_options is defined
+  tags:
+    - ntp_config
+    - nxos
